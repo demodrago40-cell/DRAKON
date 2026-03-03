@@ -1,0 +1,162 @@
+<!-- Landing Page Overlay -->
+<div id="landing-page" class="landing-page fade-in-page">
+    <!-- Floating Navbar -->
+    <nav class="floating-navbar">
+        <div class="navbar-content">
+            <div class="navbar-brand">
+                <img src="{{ url_for('static', filename='img/logo.png') }}" alt="DRAKON Logo" class="logo-img">
+                <span>DRAKON</span>
+            </div>
+            <div class="navbar-links">
+                <a href="{{ url_for('landing.features') }}">Features</a>
+                <a href="{{ url_for('landing.about') }}">About</a>
+            </div>
+            <div class="navbar-actions">
+                <a href="{{ url_for('main.login') }}" class="navbar-btn secondary">Login</a>
+                <button class="navbar-btn primary" onclick="dismissLandingPage()">Get Started</button>
+            </div>
+            <button class="navbar-mobile-toggle" onclick="toggleMobileMenu()">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+        <!-- Mobile Menu -->
+        <div class="navbar-mobile-menu" id="navbarMobileMenu">
+            <a href="{{ url_for('landing.features') }}">Features</a>
+            <a href="{{ url_for('landing.about') }}">About</a>
+            <div class="mobile-menu-actions">
+                <a href="{{ url_for('main.login') }}" class="navbar-btn secondary">Login</a>
+                <button class="navbar-btn primary" onclick="dismissLandingPage()">Get Started</button>
+            </div>
+        </div>
+    </nav>
+
+    <div id="aurora-container" class="aurora-container"></div>
+    <div class="hero-content">
+        <div class="hero-pill">
+            <i class="fas fa-bolt"></i> New AI Engine
+        </div>
+
+        <h1 class="hero-title">
+            Unleash the Power of DRAKON AI
+        </h1>
+
+        <p class="hero-subtitle">
+            Your all-in-one intelligent workspace featuring advanced contextual code generation, seamless local model
+            reasoning, and powerful AI image generation.
+        </p>
+
+        <div class="hero-buttons">
+            <button class="hero-btn primary" onclick="dismissLandingPage()">Get Started for Free</button>
+            <a href="{{ url_for('landing.learnmore') }}" style="text-decoration: none;" class="hero-btn secondary">Learn
+                More</a>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <section id="features" class="features-section">
+        <div class="features-container">
+            <div class="features-header">
+                <span class="features-badge">Features</span>
+                <h2 class="features-title">Everything you need to code faster</h2>
+                <p class="features-subtitle">Powerful AI-driven tools that understand your code and help you ship
+                    quality software.</p>
+            </div>
+
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <h3 class="feature-title">Intelligent Code Completion</h3>
+                    <p class="feature-description">Context-aware suggestions that understand your codebase and coding
+                        patterns.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-bug"></i>
+                    </div>
+                    <h3 class="feature-title">Smart Debugging</h3>
+                    <p class="feature-description">Instantly identify bugs and get AI-powered fixes with detailed
+                        explanations.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3 class="feature-title">Code Generation</h3>
+                    <p class="feature-description">Generate entire functions, classes, or modules from natural language
+                        descriptions.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <h3 class="feature-title">Natural Conversations</h3>
+                    <p class="feature-description">Chat naturally about your code. Ask questions, get explanations,
+                        refactor with ease.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="feature-title">Security Analysis</h3>
+                    <p class="feature-description">Detect vulnerabilities and security issues before they reach
+                        production.</p>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <h3 class="feature-title">10x Productivity</h3>
+                    <p class="feature-description">Ship features faster with AI that handles the boilerplate so you can
+                        focus on logic.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</div>
+
+<script>
+    function dismissLandingPage() {
+        const lp = document.getElementById('landing-page');
+        if (lp) {
+            lp.classList.add('fade-out');
+            setTimeout(() => {
+                lp.style.display = 'none';
+            }, 500);
+        }
+    }
+
+    function toggleMobileMenu() {
+        const menu = document.getElementById('navbarMobileMenu');
+        if (menu) {
+            menu.classList.toggle('active');
+        }
+    }
+</script>
+
+<script type="module">
+    import { initAurora } from "{{ url_for('static', filename='js/aurora.js') }}";
+
+    console.log('Landing page script loaded');
+    try {
+        const result = initAurora('aurora-container', {
+            colorStops: ['#5227FF', '#7cff67', '#5227FF'],
+            amplitude: 1.0,
+            blend: 0.5
+        });
+        if (result) {
+            console.log('Aurora initialized successfully');
+        } else {
+            console.error('Aurora initialization failed (container not found?)');
+        }
+    } catch (e) {
+        console.error('Error initializing Aurora:', e);
+    }
+</script>

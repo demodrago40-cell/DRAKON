@@ -1,0 +1,64 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+#                           📦 DRAKON DEPENDENCIES (clean, minimal, production-ready)
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# Core Web Framework
+Flask==2.3.3
+Flask-CORS==4.0.0
+Flask-SQLAlchemy
+
+# HTTP Requests
+requests==2.31.0
+
+# Environment Variables
+python-dotenv==1.0.0
+
+# Development Tools (Optional)
+python-decouple==3.8
+
+# AI SDKs
+openai
+
+# ComfyUI Integration
+websocket-client
+
+# Useful runtime / production helpers
+werkzeug>=2.3.0
+gunicorn==23.0.0  # optional
+setuptools
+pyinstaller
+PyQt5
+PyQtWebEngine
+
+
+# Type hints compatibility
+typing-extensions>=4.0.0
+
+# File Handling
+PyMuPDF
+python-docx
+Pillow
+easyocr
+pytesseract
+
+
+# CUDA GPU Acceleration (PyTorch with CUDA 12.1)
+# Install with: pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu121
+torch
+torchvision
+
+# Firebase Admin SDK
+firebase-admin
+
+# ═══════════════════════════════════════════════════════════════════════════════
+# Installation:
+#   python -m venv .venv
+#   .venv\Scripts\activate   (Windows)
+#   pip install --upgrade pip
+#   pip install -r requirements.txt
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# Google Gmail API
+google-api-python-client
+google-auth-httplib2
+google-auth-oauthlib

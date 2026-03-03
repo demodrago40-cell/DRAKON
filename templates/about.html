@@ -1,0 +1,649 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - DRAKON AI</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/logo.png') }}">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/contact_component.css') }}">
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/split-type"></script>
+    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+</head>
+
+<body class="fade-in-page">
+    <!-- YUG Page Loader -->
+    <script src="{{ url_for('static', filename='js/loader.js') }}"></script>
+
+    <div class="features-page"> <!-- Reusing features-page class for similar layout structure -->
+        <!-- Floating Navbar -->
+        <nav class="floating-navbar">
+            <div class="navbar-content">
+                <a href="{{ url_for('landing.index') }}" style="text-decoration: none;" class="navbar-brand">
+                    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="DRAKON Logo" class="logo-img">
+                    <span>DRAKON</span>
+                </a>
+                <div class="navbar-links">
+                    <a href="{{ url_for('landing.features') }}">Features</a>
+                    <a href="{{ url_for('landing.about') }}" class="active">About</a>
+                </div>
+                <div class="navbar-actions">
+                    <a href="{{ url_for('main.login') }}" class="navbar-btn secondary">Login</a>
+                    <a href="{{ url_for('landing.index') }}?start=true" class="navbar-btn primary">Get Started</a>
+                </div>
+                <button class="navbar-mobile-toggle" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <!-- Mobile Menu -->
+            <div class="navbar-mobile-menu" id="navbarMobileMenu">
+                <a href="{{ url_for('landing.features') }}">Features</a>
+                <a href="{{ url_for('landing.about') }}" class="active">About</a>
+                <div class="mobile-menu-actions">
+                    <a href="{{ url_for('main.login') }}" class="navbar-btn secondary">Login</a>
+                    <a href="{{ url_for('landing.index') }}?start=true" class="navbar-btn primary">Get Started</a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="features-hero">
+            <div class="features-hero-content">
+                <span class="features-badge">About Us</span>
+                <h1 class="features-hero-title">Building the future of coding</h1>
+                <p class="features-hero-subtitle">
+                    DRAKON acts as a lightweight wrapper that simplifies development workflows and improves code
+                    clarity.
+                </p>
+            </div>
+        </section>
+
+        <!-- About Content Section -->
+        <section class="features-section">
+            <div class="features-container">
+                <div class="about-grid">
+                    <div class="about-card">
+                        <h3>Our Mission</h3>
+                        <p>To empower developers with a powerful AI wrapper that removes friction and accelerates
+                            innovation.</p>
+                    </div>
+                    <div class="about-card">
+                        <h3>Our Vision</h3>
+                        <p>To redefine how software is built — where intelligence handles complexity, and developers
+                            build without limits.</p>
+                    </div>
+                </div>
+
+                <div class="team-section" style="margin-top: 80px; text-align: center;">
+                    <h2 class="features-title" style="font-size: 2.5rem; margin-bottom: 40px;">Meet the Creators</h2>
+
+                    <div class="flip-cards-container">
+                        <!-- Card 1: Yug -->
+                        <div class="flip-card">
+                            <div class="flip-card-front">
+                                <div class="creator-img-wrapper">
+                                    <img src="https://github.com/Yugpatel009.png" alt="Yug" class="creator-img">
+                                </div>
+                                <p class="flip-card-title">Yug</p>
+                                <p class="flip-card-subtitle">Creator of Drakon</p>
+                            </div>
+                            <div class="flip-card-back">
+                                <h3>I develop <b style="color: #ffc107;">Drakon AI Agents</b> that run on locally
+                                    deployed models, complete with custom-built front-end systems.</h3>
+                                <div class="creator-links" style="justify-content: center; margin-top: 15px;">
+                                    <a href="https://github.com/Yugpatel009" target="_blank"><i
+                                            class="fab fa-github"></i></a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Card 2: Aryan -->
+                        <div class="flip-card">
+                            <div class="flip-card-front">
+                                <div class="creator-img-wrapper">
+                                    <img src="https://github.com/devbyaryanvala.png" alt="Aryan" class="creator-img">
+                                </div>
+                                <p class="flip-card-title">Aryan</p>
+                                <p class="flip-card-subtitle">Creator of Hushiyar AI</p>
+                            </div>
+                            <div class="flip-card-back">
+                                <h3>The brilliant mind behind <b style="color: #ffc107;">Hushiyar AI Model</b>, a
+                                    cutting-edge Ollama reasoning
+                                    model.</h3>
+                                <div class="creator-links" style="justify-content: center; margin-top: 15px;">
+                                    <a href="https://github.com/devbyaryanvala" target="_blank"><i
+                                            class="fab fa-github"></i></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div style="margin-top: 40px; display: flex; justify-content: center;">
+                        <a id="lets-connect-btn-main" href="#" class="custom-button w-inline-block"
+                            style="max-width: 280px; width: auto; padding: 14px 40px;">
+                            <div class="button-glow"></div>
+                            <div class="pulse-dot-wrapper">
+                                <div class="pulse-dot-core"></div>
+                                <div class="pulse-dot-ring"></div>
+                            </div>
+                            <span class="button-text">Let's connect</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Load Tilt Effect -->
+                <script src="{{ url_for('static', filename='js/tilt.js') }}"></script>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="features-cta">
+            <div class="cta-content">
+                <h2>Join our journey</h2>
+                <p>Be part of the revolution in software development.</p>
+                <div class="cta-buttons">
+                    <a href="{{ url_for('landing.index') }}?start=true" class="hero-btn primary">Get Started Free</a>
+                    <a href="{{ url_for('landing.index') }}" class="hero-btn secondary">Back to Home</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Hidden Modal Wrapper -->
+
+
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('navbarMobileMenu');
+            if (menu) menu.classList.toggle('active');
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            // Modal Logic
+            const modalWrapper = document.querySelector('.drakon-contact-modal_wrapper');
+            const connectBtns = document.querySelectorAll('#lets-connect-btn-main, #lets-connect-btn-yug');
+            const closeButtons = document.querySelectorAll('.drakon-contact-close-modal');
+            const featuresPage = document.querySelector('.features-page');
+
+            function lockScroll() {
+                document.body.style.overflow = 'hidden';
+                document.documentElement.style.overflow = 'hidden';
+                if (featuresPage) featuresPage.style.overflowY = 'hidden';
+            }
+
+            function unlockScroll() {
+                document.body.style.overflow = '';
+                document.documentElement.style.overflow = '';
+                if (featuresPage) featuresPage.style.overflowY = '';
+            }
+
+            // Typewriter effect
+            function typeWriter(element, text, speed) {
+                let i = 0;
+                element.textContent = '';
+                function type() {
+                    if (i < text.length) {
+                        element.textContent += text.charAt(i);
+                        i++;
+                        setTimeout(type, speed);
+                    }
+                }
+                type();
+            }
+
+            if (connectBtns.length > 0 && modalWrapper) {
+                // Open Modal
+                connectBtns.forEach(btn => {
+                    btn.addEventListener('click', function (e) {
+                        e.preventDefault();
+                        modalWrapper.classList.add('open');
+                        // Typewriter effect on orb text
+                        const typer = document.getElementById('typer-modal');
+                        if (typer) {
+                            typer.textContent = 'Hey human 👋 ';
+                            setTimeout(() => {
+                                const rest = "I'll deliver your message straight to Yug!";
+                                let idx = 0;
+                                function typeRest() {
+                                    if (idx < rest.length) {
+                                        typer.textContent += rest.charAt(idx);
+                                        idx++;
+                                        setTimeout(typeRest, 30);
+                                    }
+                                }
+                                typeRest();
+                            }, 400);
+                        }
+                    });
+                });
+
+                // Close Modal
+                closeButtons.forEach(btn => {
+                    btn.addEventListener('click', function () {
+                        modalWrapper.classList.remove('open');
+                        unlockScroll();
+                        setTimeout(resetForm, 300);
+                    });
+                });
+            }
+
+            window.unlockScroll = unlockScroll;
+        });
+
+        function resetForm() {
+            document.getElementById('email-form').reset();
+            document.getElementById('email-form').style.display = 'block';
+            document.getElementById('successMessage').style.display = 'none';
+            document.getElementById('errorMessage').style.display = 'none';
+        }
+
+        async function submitContactForm(e) {
+            e.preventDefault();
+            const formData = {};
+            formData.name = document.getElementById('name').value;
+            formData.email = document.getElementById('email').value;
+            formData.message = document.getElementById('Message').value;
+            const form = document.getElementById('email-form');
+            const successMsg = document.getElementById('successMessage');
+            const errorMsg = document.getElementById('errorMessage');
+            const submitBtn = form.querySelector('button[type="submit"]');
+
+            // Loading state
+            const originalBtnText = submitBtn.innerText;
+            submitBtn.innerText = 'Sending...';
+            submitBtn.disabled = true;
+
+            try {
+                const response = await fetch('/api/contact', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(formData)
+                });
+
+                const data = await response.json();
+
+                if (response.ok) {
+                    form.style.display = 'none';
+                    successMsg.style.display = 'block';
+                    errorMsg.style.display = 'none';
+
+                    // Auto close after 3 seconds
+                    setTimeout(() => {
+                        document.querySelector('.drakon-contact-modal_wrapper').classList.remove('open');
+                        if (window.unlockScroll) window.unlockScroll();
+                        // Reset form after closing animation
+                        setTimeout(resetForm, 300);
+                    }, 3000);
+                } else {
+                    throw new Error(data.error || 'Failed to send');
+                }
+            } catch (error) {
+                console.error('Error:', error);
+                errorMsg.style.display = 'block';
+                errorMsg.querySelector('div').innerText = error.message || "Oops! Something went wrong.";
+            } finally {
+                submitBtn.innerText = originalBtnText;
+                submitBtn.disabled = false;
+            }
+        }
+    </script>
+
+    <style>
+        /* Specific styles for About page reusing existing classes */
+        .about-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: var(--space-lg);
+            margin-bottom: var(--space-xl);
+        }
+
+        .about-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl);
+            transition: all var(--transition-base);
+        }
+
+        .about-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-4px);
+        }
+
+        .about-card h3 {
+            font-size: 1.5rem;
+            color: var(--text-primary);
+            margin-bottom: var(--space-md);
+        }
+
+        .about-card p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        /* Creators Section Redesign */
+        .creators-section-redesign {
+            display: flex;
+            flex-direction: column;
+            gap: 120px;
+            padding: var(--space-xl) 0;
+            width: 100%;
+        }
+
+        .creator-feature-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 80px;
+            width: 100%;
+        }
+
+        .creator-feature-row.reverse-layout {
+            flex-direction: row-reverse;
+        }
+
+        /* Flip Card Design */
+        .flip-cards-container {
+            display: flex;
+            justify-content: center;
+            gap: 50px;
+            padding: 60px 0;
+            flex-wrap: wrap;
+            perspective: 1200px;
+        }
+
+        .flip-card {
+            color: var(--text-primary);
+            width: 280px;
+            height: 360px;
+            position: relative;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            line-height: 1.6;
+            padding: 28px;
+            background: linear-gradient(145deg, rgba(20, 20, 35, 0.9), rgba(10, 10, 20, 0.95));
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            box-shadow:
+                0 8px 32px rgba(0, 0, 0, 0.4),
+                0 2px 8px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            transition: all 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+            overflow: hidden;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Subtle shimmer border effect */
+        .flip-card::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 21px;
+            padding: 1px;
+            background: linear-gradient(135deg, rgba(0, 169, 201, 0.3), transparent 40%, transparent 60%, rgba(255, 159, 252, 0.3));
+            -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+            -webkit-mask-composite: xor;
+            mask-composite: exclude;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.8s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .flip-card-front {
+            bottom: 0;
+            left: 0;
+            position: absolute;
+            width: 100%;
+            text-align: center;
+            transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.5s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-end;
+            height: 100%;
+            padding: 0 28px 36px;
+            z-index: 2;
+        }
+
+        .flip-card-back {
+            transform: translateX(120%);
+            transition: transform 0.8s cubic-bezier(0.23, 1, 0.32, 1), opacity 0.5s ease;
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 28px;
+            text-align: center;
+            background: linear-gradient(180deg, rgba(10, 10, 25, 0.7), rgba(15, 15, 30, 0.9));
+            z-index: 1;
+            border-radius: 20px;
+        }
+
+        /* Text */
+        .flip-card-title {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+            letter-spacing: -0.02em;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+
+        .flip-card-subtitle {
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--accent-secondary);
+            margin-bottom: 4px;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            opacity: 0.85;
+        }
+
+        /* Creator Image Styles */
+        .creator-img-wrapper {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 16px;
+            border-radius: 50%;
+            overflow: hidden;
+            border: 3px solid rgba(255, 255, 255, 0.15);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+            background: linear-gradient(135deg, rgba(20, 20, 35, 1), rgba(10, 10, 20, 1));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            z-index: 5;
+            transition: border-color 0.4s ease, transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .creator-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .flip-card:hover .creator-img-wrapper {
+            border-color: var(--accent-primary);
+            box-shadow: 0 8px 30px rgba(139, 92, 246, 0.3);
+            transform: translateY(-4px);
+        }
+
+        .flip-card:hover .creator-img {
+            transform: scale(1.1);
+        }
+
+        /* Neon divider */
+        .flip-card-title::after {
+            content: "";
+            display: block;
+            width: 40px;
+            border-radius: 2px;
+            height: 3px;
+            margin: 14px auto;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-secondary));
+            box-shadow: 0 0 12px var(--accent-primary), 0 0 4px var(--accent-secondary);
+            transition: width 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        /* Hover */
+        .flip-card:hover {
+            background: linear-gradient(145deg, rgba(25, 25, 45, 0.95), rgba(15, 15, 30, 1));
+            border-color: rgba(255, 255, 255, 0.15);
+            box-shadow:
+                0 20px 60px rgba(0, 0, 0, 0.5),
+                0 4px 16px rgba(0, 0, 0, 0.4),
+                0 0 40px rgba(0, 169, 201, 0.08),
+                inset 0 1px 0 rgba(255, 255, 255, 0.08);
+            transform: translateY(-8px);
+        }
+
+        .flip-card:hover::before {
+            opacity: 1;
+        }
+
+        .flip-card:hover .flip-card-title::after {
+            width: 60px;
+        }
+
+        .flip-card:hover .flip-card-front {
+            transform: translateX(-120%);
+            opacity: 0;
+        }
+
+        .flip-card:hover .flip-card-back {
+            transform: translateX(0);
+            opacity: 1;
+        }
+
+        .flip-card-back p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            margin-bottom: 24px;
+            line-height: 1.7;
+        }
+
+        .flip-card-back .creator-links {
+            display: flex;
+            gap: 16px;
+        }
+
+        .flip-card-back .creator-links a {
+            color: var(--text-primary) !important;
+            opacity: 0.7;
+            font-size: 1.4rem;
+            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        .flip-card-back .creator-links a:hover {
+            opacity: 1;
+            color: var(--accent-primary) !important;
+            text-shadow: 0 0 15px var(--accent-primary);
+            transform: scale(1.2) translateY(-2px);
+        }
+
+        @media (max-width: 600px) {
+            .flip-card {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .about-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    <!-- Hidden Modal Wrapper Moved to Body End -->
+    <div class="drakon-contact-modal_wrapper">
+        <div data-click-formClose="" class="close_area drakon-contact-close-modal"
+            style="position: absolute; width: 100%; height: 100%;">
+        </div>
+        <div class="drakon-contact-modal">
+            <img loading="lazy"
+                src="https://cdn.prod.website-files.com/68f3884d9e35f473a885d321/69087928063763f8e5773073_bouncing%20blinking%20orb.gif"
+                alt="Black glossy sphere" class="blinking_orb-form" />
+
+            <div class="modal_form-block w-form">
+                <form id="email-form" name="email-form" onsubmit="submitContactForm(event)" class="modal_form">
+                    <div id="orbTypingModal" class="orb_text-box-modal">
+                        <p id="typer-modal" class="orb_text is-modal"></p>
+                    </div>
+
+                    <input class="drakon-contact-modal_form-text-field w-input" maxlength="256" name="name"
+                        data-name="Name" placeholder="Name" type="text" id="name" autocomplete="name" required="" />
+
+                    <input class="drakon-contact-modal_form-text-field w-input" maxlength="256" name="email"
+                        data-name="Email" placeholder="Email" type="email" id="email" autocomplete="email"
+                        required="" />
+
+                    <textarea id="Message" name="Message" maxlength="5000" data-name="Message"
+                        placeholder="Your Message" required=""
+                        class="drakon-contact-modal_form-text-field is-textarea w-input" rows="4"></textarea>
+
+                    <div class="spacer-small"></div>
+
+                    <div class="drakon-contact-form_submit-button">
+                        <button type="submit" class="drakon-contact-modal_submit-button">
+                            <div class="glow-dot"
+                                style="width: 8px; height: 8px; background-color: #00A9C9; border-radius: 50%; box-shadow: 0 0 5px #00A9C9;">
+                            </div>
+                            Send Transmission
+                        </button>
+                    </div>
+                </form>
+
+                <div class="drakon-contact-modal_form-success-wrapper w-form-done" id="successMessage">
+                    <div>Transmission received. I’ll make sure Yug gets it! 😎</div>
+                </div>
+
+                <div class="drakon-contact-modal_form-error-wrapper w-form-fail" id="errorMessage">
+                    <div>Oops! Something went wrong while submitting the form.</div>
+                </div>
+            </div>
+
+            <img loading="lazy"
+                src="https://cdn.prod.website-files.com/68f3884d9e35f473a885d321/68f4858aac250343d662c890_2c81f5cced6abafded484e934f41324a_Ellipse%204.avif"
+                alt="" class="elipse1_modal" />
+            <img loading="lazy"
+                src="https://cdn.prod.website-files.com/68f3884d9e35f473a885d321/68f4858aac250343d662c890_2c81f5cced6abafded484e934f41324a_Ellipse%204.avif"
+                alt="" class="elipse2_modal" />
+
+            <div data-click-formClose="" class="drakon-contact-modal_close-button drakon-contact-close-modal">
+                <div class="close_icon w-embed"><svg width="100%" height="100%" viewBox="0 0 29 28" fill="none"
+                        xmlns="http://www.w3.org/2000/svg">
+                        <path
+                            d="M28.4141 0.707031L14.9141 14.207L27.707 27L27 27.707L14.207 14.9141L1.41406 27.707L0.707031 27L13.5 14.207L0 0.707031L0.707031 0L14.207 13.5L27.707 0L28.4141 0.707031Z"
+                            fill="currentColor" />
+                    </svg></div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>

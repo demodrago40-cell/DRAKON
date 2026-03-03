@@ -1,0 +1,550 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DRAKON - AI Interface</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/logo.png') }}">
+
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Syntax Highlighting -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/github-dark.min.css') }}">
+    <script src="{{ url_for('static', filename='js/highlight.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/marked.min.js') }}"></script>
+
+    <!-- Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Main Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}?v=1.5">
+
+    <!-- Dynamic Background -->
+    <!-- <script type="module">
+        import { initAurora } from "{{ url_for('static', filename='js/aurora.js') }}";
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize Aurora with a deep, rich theme color (Dark Blue/Purple)
+            // RGB: [0.05, 0.1, 0.2] -> Deep Space Blue
+            initAurora('bg-canvas', {
+                color: [0.05, 0.1, 0.25],
+                amplitude: 1.2,
+                distance: 0,
+                enableMouseInteraction: true
+            });
+        });
+    </script> -->
+</head>
+
+<body>
+
+
+    <!-- Background Canvas -->
+    <!-- <div id="bg-canvas" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 0;"></div> -->
+
+    {% if is_guest or show_landing %}
+    {% include 'landing.html' %}
+    {% endif %}
+
+    <!-- Floating Sidebar Toggle (visible when sidebar is collapsed) -->
+    <button class="sidebar-float-btn" id="sidebarOpenBtn" onclick="toggleSidebar()" title="Open sidebar">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="3" y="3" width="18" height="18" rx="2" />
+            <line x1="9" y1="3" x2="9" y2="21" />
+        </svg>
+    </button>
+
+    <div class="app-container">
+        <!-- Main Layout -->
+        <div class="main-wrapper">
+            <!-- Sidebar Overlay (Mobile) -->
+            <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+            <!-- Sidebar -->
+            <aside class="sidebar" id="sidebar">
+                <!-- Sidebar Top -->
+                <div class="sidebar-top">
+                    <div class="sidebar-logo">
+                        <img src="{{ url_for('static', filename='img/logo.png') }}" alt="DRAKON"
+                            class="sidebar-logo-img">
+                        <span class="gradient-text sidebar-brand">DRAKON</span>
+                    </div>
+                    <button class="sidebar-toggle-btn" onclick="toggleSidebar()" title="Close sidebar">
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <rect x="3" y="3" width="18" height="18" rx="2" />
+                            <line x1="9" y1="3" x2="9" y2="21" />
+                        </svg>
+                    </button>
+                </div>
+
+                <!-- Nav Links -->
+                <nav class="sidebar-nav">
+                    <a href="#" class="sidebar-nav-item" onclick="startNewChat()">
+                        <i class="fas fa-pen-to-square"></i>
+                        <span>New chat</span>
+                    </a>
+                    <a href="#" class="sidebar-nav-item" onclick="searchChats()">
+                        <i class="fas fa-magnifying-glass"></i>
+                        <span>Search chats</span>
+                    </a>
+                    <a href="#" class="sidebar-nav-item" id="imagesNavItem">
+                        <i class="fas fa-image"></i>
+                        <span>Images</span>
+                    </a>
+                </nav>
+
+                <!-- Chat History -->
+                <div class="sidebar-section">
+                    <div class="sidebar-section-title">Your chats</div>
+                    <div class="chat-list" id="chatList">
+                        <!-- Chat Items will be dynamically loaded -->
+                    </div>
+                </div>
+
+                <!-- Sidebar Bottom Actions (moved from header) -->
+                <div class="sidebar-bottom">
+                    <button class="sidebar-action-btn" onclick="checkSystemHealth()" title="System Status">
+                        <i class="fas fa-circle-check"></i>
+                        <span>System Status</span>
+                    </button>
+                    {% if is_guest %}
+                    <a href="/login" class="sidebar-action-btn">
+                        <i class="fas fa-sign-in-alt"></i>
+                        <span>Sign in</span>
+                    </a>
+                    <a href="/signup" class="sidebar-action-btn sidebar-action-primary">
+                        <i class="fas fa-user-plus"></i>
+                        <span>Sign up</span>
+                    </a>
+                    {% else %}
+                    <button class="sidebar-action-btn" onclick="openSettings()" title="Settings">
+                        <i class="fas fa-gear"></i>
+                        <span>Settings</span>
+                    </button>
+                    {% endif %}
+                </div>
+            </aside>
+
+            <!-- Chat Area -->
+            <main class="chat-container">
+                <div class="chat-messages" id="chatMessages">
+                    <!-- Welcome Screen -->
+                    <div class="welcome-screen" id="welcomeScreen">
+                        <div class="welcome-content">
+                            <div class="welcome-icon">
+                                <img src="{{ url_for('static', filename='img/logo_icon.png') }}" alt="DRAKON"
+                                    class="welcome-logo-img">
+                            </div>
+                            <h1 class="welcome-title">Welcome to DRAKON</h1>
+                            <p class="welcome-subtitle">Your AI-powered programming assistant. Ask me anything about
+                                code.
+                            </p>
+
+                            <div class="quick-prompts">
+                                <button class="prompt-chip"
+                                    onclick="sendQuickPrompt('Explain how async/await works in JavaScript')">
+                                    <i class="fas fa-code"></i>
+                                    Explain async/await
+                                </button>
+                                <button class="prompt-chip"
+                                    onclick="sendQuickPrompt('Write a Python function to sort a list')">
+                                    <i class="fas fa-rocket"></i>
+                                    Sort algorithm
+                                </button>
+                                <button class="prompt-chip" onclick="sendQuickPrompt('How do I debug my code?')">
+                                    <i class="fas fa-bug"></i>
+                                    Debugging tips
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Input Area -->
+                <div class="input-area">
+                    <!-- Active Mode Tag (shows selected mode) -->
+                    <div class="active-mode-tags" id="activeModeContainer" style="display: none; margin-bottom: 10px;">
+                        <button class="active-mode-tag" id="activeDeepThink" style="display: none;">
+                            <i class="fas fa-lightbulb"></i>
+                            <span>Deep Think</span>
+                            <i class="fas fa-times remove-icon"></i>
+                        </button>
+                        <button class="active-mode-tag img-gen-tag" id="activeImgGen" style="display: none;">
+                            <i class="fas fa-image"></i>
+                            <span>Image Generate</span>
+                            <i class="fas fa-times remove-icon"></i>
+                        </button>
+                    </div>
+
+                    {% if is_guest %}
+                    <div class="guest-limit-banner">
+                        <i class="fas fa-clock"></i>
+                        Guest Access: <span id="promptCountDisplay">{{ prompt_count }}</span>/5 Free Prompts
+                    </div>
+                    {% endif %}
+
+                    <!-- File Preview Container -->
+                    <div id="filePreviewArea" class="file-preview-area"></div>
+
+                    <!-- Single Row Input Container -->
+                    <div class="input-bar">
+                        <!-- Left: Attachment Button -->
+                        <!-- File Input (Hidden) -->
+                        <input type="file" id="fileInput" multiple style="display: none;">
+
+                        <div class="mode-dropdown-container">
+                            <button class="input-bar-icon" id="modeDropdownBtn" title="Options">
+                                <i class="fas fa-plus"></i>
+                            </button>
+                            <div class="mode-dropdown-menu" id="modeDropdownMenu">
+                                <button class="mode-dropdown-item" id="attachOption">
+                                    <i class="fas fa-paperclip"></i>
+                                    <span>Add photos & files</span>
+                                </button>
+                                <div class="mode-dropdown-divider"></div>
+                                <button class="mode-dropdown-item" id="imgGenOption">
+                                    <i class="fas fa-wand-magic-sparkles"></i>
+                                    <span>Create image</span>
+                                </button>
+                                <button class="mode-dropdown-item" id="deepThinkOption">
+                                    <i class="fas fa-lightbulb"></i>
+                                    <span>Thinking</span>
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Center: Text Input -->
+                        <textarea class="input-bar-text" id="messageInput" rows="1"
+                            placeholder="What do you want to know?" onkeydown="handleKeyPress(event)"
+                            oninput="autoResize(this)"></textarea>
+
+                        <!-- Right: Model + Voice + Send -->
+                        <div class="input-bar-right">
+                            <!-- Model Selector -->
+                            <div class="model-dropdown-container">
+                                <button class="input-bar-model {% if is_guest %}disabled{% endif %}"
+                                    id="modelSelectorBtn" title="Select Model" {% if is_guest %}disabled{% endif %}>
+                                    <i class="fas fa-robot"></i>
+                                    <span id="currentModelName">Drakon</span>
+                                    {% if is_guest %}
+                                    <i class="fas fa-lock"></i>
+                                    {% else %}
+                                    <i class="fas fa-chevron-down"></i>
+                                    {% endif %}
+                                </button>
+                            </div>
+
+                            <button class="send-btn" id="sendBtn" title="Send Message">
+                                <i class="fas fa-paper-plane"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Status indicator (hidden by default) -->
+        <div class="status-toast" id="statusToast">
+            <div class="status-dot" id="statusDot"></div>
+            <span id="statusText">Checking...</span>
+        </div>
+        <!-- Settings Modal -->
+        <div id="settingsModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2>Settings</h2>
+                    <button class="close-btn" onclick="closeSettings()"><i class="fas fa-times"></i></button>
+                </div>
+                <div class="modal-body">
+                    <div class="settings-section">
+                        <h3>Appearance</h3>
+                        <div class="theme-options">
+                            <button class="theme-btn active" onclick="setTheme('dark')" data-theme="dark">
+                                <i class="fas fa-moon"></i>
+                                <span>Dark</span>
+                            </button>
+                            <button class="theme-btn" onclick="setTheme('light')" data-theme="light">
+                                <i class="fas fa-sun"></i>
+                                <span>Light</span>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login Required Modal -->
+    <div id="loginModal" class="modal">
+        <div class="modal-content" style="max-width: 400px; text-align: center;">
+            <div class="modal-header">
+                <h2>Login Required</h2>
+                <button class="close-btn" onclick="document.getElementById('loginModal').classList.remove('active')"><i
+                        class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div style="font-size: 3rem; color: var(--accent-primary); margin-bottom: 20px;">
+                    <i class="fas fa-lock"></i>
+                </div>
+                <p style="margin-bottom: 24px; font-size: 1.1rem; color: var(--text-secondary);">
+                    You've reached the free prompt limit. Log in to access unlimited chats and advanced models.
+                </p>
+                <div style="display: flex; gap: 10px; justify-content: center;">
+                    <a href="/login" class="header-btn btn-secondary" style="width: 100%;">Sign In</a>
+                    <a href="/signup" class="header-btn btn-primary" style="width: 100%;">Create Account</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Hushiyar Model Required Modal -->
+    <div id="hushiyarModal" class="modal">
+        <div class="modal-content" style="max-width: 500px; text-align: center;">
+            <div class="modal-header">
+                <h2>Hushiyar Model Required</h2>
+                <button class="close-btn"
+                    onclick="document.getElementById('hushiyarModal').classList.remove('active')"><i
+                        class="fas fa-times"></i></button>
+            </div>
+            <div class="modal-body">
+                <div style="font-size: 3rem; color: #ff9800; margin-bottom: 20px;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <p style="margin-bottom: 20px; font-size: 1.1rem; color: var(--text-secondary);">
+                    The <strong style="color: #fff;">Hushiyar</strong> model must be installed locally before you can
+                    use any models or start chatting.
+                </p>
+                <div
+                    style="background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; padding: 16px; text-align: left; margin-bottom: 24px;">
+                    <p style="margin-bottom: 10px; font-weight: 500; color: #fff; font-size: 0.95rem;">Please run this
+                        command in your terminal:</p>
+                    <div style="display: flex; gap: 8px; align-items: stretch;">
+                        <code
+                            style="flex: 1; background: #1e1e1e; padding: 12px; border-radius: 6px; font-family: monospace; color: #4a9eff; font-size: 1.1rem;">ollama run aryanvala/hushiyar-alpha:latest</code>
+                    </div>
+                </div>
+                <button class="header-btn btn-primary" style="width: 100%;"
+                    onclick="document.getElementById('hushiyarModal').classList.remove('active'); document.getElementById('refreshModelsBtn')?.click();">
+                    <i class="fas fa-sync-alt"></i> I've installed it, refresh models
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Model Dropdown Menu (Portal - outside overflow:hidden containers) -->
+    <div class="model-dropdown-menu" id="modelDropdownMenu"
+        style="display: none; position: fixed; bottom: 100px; right: 100px; background: #1e1e1e; border: 1px solid #444; border-radius: 12px; padding: 8px; z-index: 99999; min-width: 280px; box-shadow: 0 10px 40px rgba(0,0,0,0.8);">
+        <div class="dropdown-header"
+            style="padding: 12px 16px; font-weight: 600; color: #fff; border-bottom: 1px solid #333;">Select Model</div>
+        <div class="dropdown-items" style="padding: 8px;">
+            <button class="mode-dropdown-item active"
+                style="display: flex; width: 100%; padding: 10px 12px; background: transparent; border: none; color: #fff; cursor: pointer; border-radius: 8px; text-align: left;">
+                <div class="dropdown-item-content" style="flex: 1;">
+                    <span class="dropdown-item-title" style="display: block; font-weight: 500;">Drakon</span>
+                    <span class="dropdown-item-subtitle" style="display: block; font-size: 0.8rem; color: #888;">Default
+                        AI model</span>
+                </div>
+                <div class="dropdown-item-right">
+                    <div class="dropdown-check"
+                        style="width: 20px; height: 20px; background: #4a9eff; border-radius: 50%; display: flex; align-items: center; justify-content: center;">
+                        <i class="fas fa-check" style="font-size: 10px; color: #000;"></i>
+                    </div>
+                </div>
+            </button>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}?v=1.6"></script>
+    <script>
+        // Global function to show login modal
+        function showLoginModal() {
+            const modal = document.getElementById('loginModal');
+            if (modal) modal.classList.add('active');
+        }
+
+        // Quick prompt function
+        function sendQuickPrompt(prompt) {
+            if (drakon) {
+                drakon.sendMessage(prompt);
+            }
+        }
+        // Mode tag elements for visual feedback
+        const activeModeContainer = document.getElementById('activeModeContainer');
+        const activeDeepThink = document.getElementById('activeDeepThink');
+        const activeImgGen = document.getElementById('activeImgGen');
+
+        // Remove Deep Think mode tag when clicked
+        activeDeepThink.addEventListener('click', function () {
+            if (drakon) {
+                drakon.deepThinkMode = false;
+                const dtBtn = document.getElementById('deepThinkOption');
+                if (dtBtn) dtBtn.classList.remove('selected');
+                const mainBtn = document.getElementById('modeDropdownBtn');
+                if (mainBtn) {
+                    mainBtn.innerHTML = '<i class="fas fa-plus"></i>';
+                    mainBtn.style.color = '';
+                }
+            }
+            this.style.display = 'none';
+            updateActiveModeContainer();
+        });
+
+        // Remove Image Gen mode tag when clicked
+        activeImgGen.addEventListener('click', function () {
+            window.imageGenMode = false;
+            if (drakon) {
+                const igBtn = document.getElementById('imgGenOption');
+                if (igBtn) igBtn.classList.remove('selected');
+                const mainBtn = document.getElementById('modeDropdownBtn');
+                if (mainBtn) {
+                    mainBtn.innerHTML = '<i class="fas fa-plus"></i>';
+                    mainBtn.style.color = '';
+                }
+            }
+            this.style.display = 'none';
+            document.getElementById('messageInput').placeholder = 'What do you want to know?';
+            updateActiveModeContainer();
+        });
+
+        function updateActiveModeContainer() {
+            const hasActiveMode = (drakon && drakon.deepThinkMode) || window.imageGenMode;
+            activeModeContainer.style.display = hasActiveMode ? 'flex' : 'none';
+        }
+
+
+
+        // System health check with toast notification
+        function checkSystemHealth() {
+            const toast = document.getElementById('statusToast');
+            const dot = document.getElementById('statusDot');
+            const text = document.getElementById('statusText');
+
+            toast.classList.add('visible');
+            dot.className = 'status-dot checking';
+            text.textContent = 'Checking system...';
+
+            fetch('/health')
+                .then(response => response.json())
+                .then(data => {
+                    if (data.status === 'healthy') {
+                        dot.className = 'status-dot online';
+                        text.textContent = 'System Online';
+                    } else {
+                        dot.className = 'status-dot offline';
+                        text.textContent = 'System Offline';
+                    }
+                })
+                .catch(() => {
+                    dot.className = 'status-dot offline';
+                    text.textContent = 'Connection Error';
+                })
+                .finally(() => {
+                    setTimeout(() => {
+                        toast.classList.remove('visible');
+                    }, 3000);
+                });
+        }
+
+        // Show notification
+        function showNotification(message, type = 'info') {
+            // Check if it's the limit message
+            if (message.includes('free limit') || message.includes('LIMIT_REACHED')) {
+                document.getElementById('loginModal').classList.add('active');
+                return;
+            }
+
+            const existing = document.querySelector('.notification-toast');
+            if (existing) existing.remove();
+
+            const notification = document.createElement('div');
+            notification.className = `notification-toast ${type}`;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+
+            setTimeout(() => notification.classList.add('visible'), 10);
+            setTimeout(() => {
+                notification.classList.remove('visible');
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Override sendMessage to handle response time
+        if (typeof sendMessage === 'undefined') {
+            window.sendMessage = function () {
+                if (drakon) {
+                    drakon.sendMessage().then(() => {
+                        // Update counter if guest
+                        const counter = document.getElementById('promptCountDisplay');
+                        if (counter) {
+                            let val = parseInt(counter.textContent);
+                            if (!isNaN(val) && val < 5) counter.textContent = val + 1;
+                        }
+                    });
+                }
+            };
+        }
+        if (typeof handleKeyPress === 'undefined') {
+            window.handleKeyPress = function (event) {
+                if (event.key === 'Enter' && !event.shiftKey) {
+                    event.preventDefault();
+                    sendMessage();
+                }
+            };
+        }
+        if (typeof autoResize === 'undefined') {
+            window.autoResize = function (textarea) {
+                textarea.style.height = 'auto';
+                textarea.style.height = Math.min(textarea.scrollHeight, 200) + 'px';
+                // Enable scroll if content exceeds max height
+                textarea.style.overflowY = textarea.scrollHeight > 200 ? 'auto' : 'hidden';
+            };
+        }
+        if (typeof resetConversation === 'undefined') {
+            window.resetConversation = function () {
+                if (drakon) drakon.resetConversation();
+            };
+        }
+        // Settings Modal Functions
+        function openSettings() {
+            document.getElementById('settingsModal').classList.add('active');
+        }
+
+        function closeSettings() {
+            document.getElementById('settingsModal').classList.remove('active');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('settingsModal').addEventListener('click', function (e) {
+            if (e.target === this) {
+                closeSettings();
+            }
+        });
+
+        // Theme Logic
+        function setTheme(theme) {
+            document.documentElement.setAttribute('data-theme', theme);
+            localStorage.setItem('theme', theme);
+
+            // Update active button state
+            document.querySelectorAll('.theme-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.theme === theme) btn.classList.add('active');
+            });
+        }
+
+        // Initialize Theme
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        setTheme(savedTheme);
+
+    </script>
+
+
+</body>
+
+</html>

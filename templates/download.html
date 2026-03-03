@@ -1,0 +1,860 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Download & Setup - DRAKON</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/logo.png') }}">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <style>
+        /* ── Download Page Specific Styles ── */
+
+        /* Hero Section Override */
+        .download-hero {
+            padding: 160px 20px 60px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-hero::before {
+            content: '';
+            position: absolute;
+            top: -100px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.12) 0%, transparent 60%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .download-hero-content {
+            max-width: 800px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        .download-hero-title {
+            font-size: 4rem;
+            font-weight: 800;
+            margin-bottom: var(--space-lg);
+            letter-spacing: -0.03em;
+            line-height: 1.1;
+            background: linear-gradient(180deg, #fff 0%, rgba(255, 255, 255, 0.65) 100%);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: slideUp 0.8s ease-out both;
+        }
+
+        .download-hero-subtitle {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 600px;
+            margin: 0 auto var(--space-xl);
+            line-height: 1.7;
+            animation: slideUp 0.8s ease-out 0.15s both;
+        }
+
+        .hero-cta-row {
+            display: flex;
+            align-items: center;
+            gap: var(--space-md);
+            justify-content: center;
+            flex-wrap: wrap;
+            animation: slideUp 0.8s ease-out 0.3s both;
+        }
+
+        .download-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.6rem;
+            padding: 14px 32px;
+            background: #fff;
+            color: #000;
+            border: none;
+            border-radius: var(--radius-full);
+            font-size: 1.05rem;
+            font-weight: 700;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .download-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 255, 255, 0.2);
+        }
+
+        .download-btn::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: radial-gradient(circle at center, rgba(139, 92, 246, 0.3) 0%, transparent 70%);
+            opacity: 0;
+            transition: opacity 0.4s;
+        }
+
+        .download-btn:hover::after {
+            opacity: 1;
+        }
+
+        .explore-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 14px 28px;
+            background: rgba(255, 255, 255, 0.05);
+            color: var(--text-secondary);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: var(--radius-full);
+            font-size: 1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all var(--transition-base);
+        }
+
+        .explore-btn:hover {
+            color: #fff;
+            background: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
+
+        .platform-hints {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            margin-top: var(--space-lg);
+            animation: slideUp 0.8s ease-out 0.45s both;
+        }
+
+        .platform-hints i {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            transition: all 0.3s;
+        }
+
+        .platform-hints i:hover {
+            color: var(--accent-primary);
+            transform: scale(1.2);
+        }
+
+        /* App Preview */
+        .app-preview-section {
+            margin-top: 60px;
+            display: flex;
+            justify-content: center;
+            animation: slideUp 0.8s ease-out 0.6s both;
+            width: 100vw;
+            margin-left: calc(-50vw + 50%);
+        }
+
+        .app-preview-frame {
+            position: relative;
+            width: 90%;
+            max-width: 1200px;
+        }
+
+        .app-preview-frame::before {
+            content: '';
+            position: absolute;
+            inset: -1px;
+            border-radius: 18px;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.3), rgba(59, 130, 246, 0.2));
+            z-index: -1;
+            opacity: 0.5;
+            transition: opacity 0.5s;
+        }
+
+        .app-preview-frame:hover::before {
+            opacity: 0.8;
+        }
+
+        .app-preview-frame img {
+            width: 100%;
+            border-radius: 16px;
+            box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.6);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            display: block;
+            transition: all 0.5s cubic-bezier(0.2, 0.8, 0.2, 1);
+        }
+
+        .app-preview-frame:hover img {
+            transform: translateY(-6px) scale(1.01);
+            box-shadow: 0 30px 60px -12px rgba(0, 0, 0, 0.5), 0 0 40px rgba(139, 92, 246, 0.1);
+        }
+
+        /* ── Download Cards ── */
+        .download-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-lg);
+            perspective: 1000px;
+        }
+
+        .download-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl) var(--space-lg);
+            position: relative;
+            overflow: hidden;
+            transition: all var(--transition-base);
+            transform-style: preserve-3d;
+        }
+
+        .download-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.06), transparent 60%);
+            opacity: 0;
+            transition: opacity 0.4s;
+            pointer-events: none;
+        }
+
+        .download-card:hover::before {
+            opacity: 1;
+        }
+
+        .download-card:hover {
+            background: rgba(255, 255, 255, 0.06);
+            border-color: rgba(255, 255, 255, 0.15);
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .download-card .card-inner {
+            position: relative;
+            z-index: 1;
+            transform: translateZ(20px);
+        }
+
+        .download-card .card-icon-box {
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, rgba(139, 92, 246, 0.2), rgba(59, 130, 246, 0.2));
+            border-radius: var(--radius-md);
+            margin-bottom: var(--space-md);
+        }
+
+        .download-card .card-icon-box i {
+            font-size: 1.4rem;
+            background: linear-gradient(135deg, #8b5cf6, #3b82f6);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .download-card h3 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: var(--space-sm);
+        }
+
+        .download-card p {
+            font-size: 0.95rem;
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: var(--space-lg);
+        }
+
+        .card-action-btn {
+            width: 100%;
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            font-weight: 600;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: rgba(255, 255, 255, 0.04);
+            color: var(--text-secondary);
+        }
+
+        .card-action-btn:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.15);
+            color: var(--text-primary);
+        }
+
+        .card-action-btn.primary-action {
+            background: #fff;
+            color: #000;
+            border: none;
+        }
+
+        .card-action-btn.primary-action:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 255, 255, 0.15);
+        }
+
+        /* Terminal Box */
+        .cmd-box {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 12px 14px;
+            font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.88rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: var(--space-md);
+            transition: all 0.3s;
+        }
+
+        .cmd-box:hover {
+            border-color: var(--border-hover);
+        }
+
+        .cmd-box .prompt-sign {
+            color: var(--accent-primary);
+            margin-right: 8px;
+            user-select: none;
+        }
+
+        .cmd-box .cmd-text {
+            color: var(--text-primary);
+        }
+
+        .cmd-box .copy-cmd {
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: color 0.2s;
+            padding: 2px;
+        }
+
+        .cmd-box .copy-cmd:hover {
+            color: var(--text-primary);
+        }
+
+        /* ── Steps Timeline ── */
+        .steps-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: var(--space-lg);
+            position: relative;
+        }
+
+        .steps-grid::before {
+            content: '';
+            position: absolute;
+            top: 36px;
+            left: 12%;
+            right: 12%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0.08), transparent);
+            z-index: 0;
+        }
+
+        .step-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: var(--radius-lg);
+            padding: var(--space-xl) var(--space-lg);
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+            transition: all var(--transition-base);
+        }
+
+        .step-item:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.12);
+            box-shadow: 0 16px 32px rgba(0, 0, 0, 0.3);
+        }
+
+        .step-badge {
+            width: 44px;
+            height: 44px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1rem;
+            margin: 0 auto var(--space-lg);
+            position: relative;
+            z-index: 1;
+            background: var(--bg-elevated);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: var(--text-primary);
+            transition: all 0.3s;
+        }
+
+        .step-item:hover .step-badge {
+            border-color: rgba(139, 92, 246, 0.4);
+            box-shadow: 0 0 20px rgba(139, 92, 246, 0.15);
+        }
+
+        .step-item h3 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: var(--space-sm);
+        }
+
+        .step-item p {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .step-item code {
+            background: var(--bg-elevated);
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            color: var(--accent-primary);
+            border: 1px solid var(--border-subtle);
+        }
+
+        .step-watermark {
+            position: absolute;
+            bottom: -15px;
+            right: 12px;
+            font-size: 6rem;
+            font-weight: 900;
+            color: rgba(255, 255, 255, 0.015);
+            line-height: 1;
+            pointer-events: none;
+            user-select: none;
+        }
+
+        /* ── Scroll Reveal ── */
+        .reveal {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.7s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .reveal.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .reveal-d1 {
+            transition-delay: 0.1s;
+        }
+
+        .reveal-d2 {
+            transition-delay: 0.2s;
+        }
+
+        .reveal-d3 {
+            transition-delay: 0.3s;
+        }
+
+        /* ── Floating Decorations ── */
+        .deco-float {
+            position: absolute;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        .deco-float i {
+            opacity: 0.04;
+        }
+
+        .deco-1 {
+            top: 300px;
+            left: 6%;
+            animation: decoFloat 8s ease-in-out infinite;
+        }
+
+        .deco-2 {
+            top: 220px;
+            right: 8%;
+            animation: decoFloat 9s ease-in-out infinite 1.5s;
+        }
+
+        .deco-3 {
+            top: 1200px;
+            left: 10%;
+            animation: decoFloat 7s ease-in-out infinite 3s;
+        }
+
+        @keyframes decoFloat {
+
+            0%,
+            100% {
+                transform: translateY(0) rotate(0deg);
+            }
+
+            50% {
+                transform: translateY(-20px) rotate(5deg);
+            }
+        }
+
+        /* ── Bottom Glow ── */
+        .page-bottom-glow {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 800px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(139, 92, 246, 0.08), transparent 70%);
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* ── Copy Toast ── */
+        .download-page-toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-default);
+            color: var(--text-primary);
+            padding: 10px 24px;
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
+            font-weight: 600;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 100000;
+        }
+
+        .download-page-toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 1024px) {
+            .download-cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .download-hero {
+                padding: 120px 20px 60px;
+            }
+
+            .download-hero-title {
+                font-size: 2.5rem;
+            }
+
+            .download-cards-grid,
+            .steps-grid {
+                grid-template-columns: 1fr;
+                max-width: 450px;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            .steps-grid::before {
+                display: none;
+            }
+
+            .hero-cta-row {
+                flex-direction: column;
+                width: 100%;
+            }
+
+            .download-btn,
+            .explore-btn {
+                width: 100%;
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+
+<body class="fade-in-page">
+    <!-- YUG Page Loader -->
+    <script src="{{ url_for('static', filename='js/loader.js') }}"></script>
+
+    <div class="features-page">
+        <!-- Floating Navbar (same as all pages) -->
+        <nav class="floating-navbar">
+            <div class="navbar-content">
+                <a href="{{ url_for('landing.index') }}" style="text-decoration: none;" class="navbar-brand">
+                    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="DRAKON Logo" class="logo-img">
+                    <span>DRAKON</span>
+                </a>
+                <div class="navbar-links">
+                    <a href="{{ url_for('landing.features') }}">Features</a>
+                    <a href="{{ url_for('landing.about') }}">About</a>
+                </div>
+                <div class="navbar-actions">
+                    <a href="{{ url_for('main.login') }}" class="navbar-btn secondary">Login</a>
+                    <a href="/logout" class="navbar-btn primary">Logout</a>
+                </div>
+                <button class="navbar-mobile-toggle" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <!-- Mobile Menu -->
+            <div class="navbar-mobile-menu" id="navbarMobileMenu">
+                <a href="{{ url_for('landing.features') }}">Features</a>
+                <a href="{{ url_for('landing.about') }}">About</a>
+                <div class="mobile-menu-actions">
+                    <a href="{{ url_for('main.login') }}" class="navbar-btn secondary">Login</a>
+                    <a href="/logout" class="navbar-btn primary">Logout</a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Floating Decorations -->
+        <div class="deco-float deco-1">
+            <i class="fab fa-windows" style="font-size: 52px; color: #8b5cf6;"></i>
+        </div>
+        <div class="deco-float deco-2">
+            <i class="fas fa-brain" style="font-size: 60px; color: #3b82f6;"></i>
+        </div>
+        <div class="deco-float deco-3">
+            <i class="fas fa-microchip" style="font-size: 44px; color: #8b5cf6;"></i>
+        </div>
+        <div class="page-bottom-glow"></div>
+
+        <!-- ═══════════════ HERO ═══════════════ -->
+        <section class="download-hero">
+            <div class="download-hero-content">
+                <span class="features-badge">
+                    <i class="fas fa-magic" style="margin-right: 4px;"></i> The Future of Local AI
+                </span>
+
+                <h1 class="download-hero-title">Free. Safe. Simple.</h1>
+
+                <p class="download-hero-subtitle">
+                    Unlock the full power of DRAKON directly on your machine.<br>
+                    Privacy-first, zero latency, and completely offline-capable.
+                </p>
+
+                <div class="hero-cta-row">
+                    <a href="/download/exe" class="download-btn">
+                        <i class="fab fa-windows"></i> Download for Windows
+                    </a>
+                    <a href="#downloads" class="explore-btn">
+                        <i class="fas fa-arrow-down"></i> Explore Setup
+                    </a>
+                    <a href="{{ url_for('landing.learnmore') }}" class="explore-btn">
+                        <i class="fas fa-info-circle"></i> Learn More
+                    </a>
+                </div>
+
+                <div class="platform-hints">
+                    <i class="fab fa-apple" title="macOS coming soon"></i>
+                    <i class="fab fa-linux" title="Linux coming soon"></i>
+                </div>
+
+                <!-- App Preview -->
+                <div class="app-preview-section">
+                    <div class="app-preview-frame">
+                        <img src="{{ url_for('static', filename='img/app_preview.png') }}" alt="DRAKON App Interface"
+                            onerror="this.style.display='none'; this.parentElement.innerHTML='<div style=\'padding: 4rem; border: 1px dashed rgba(255,255,255,0.15); border-radius: 16px; color: #505050; text-align:center;\'>App screenshot not found. Save image as static/img/app_preview.png</div>'">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════ DOWNLOAD CARDS ═══════════════ -->
+        <section class="features-section" id="downloads">
+            <div class="features-container">
+                <div class="features-header reveal">
+                    <span class="features-badge">Downloads</span>
+                    <h2 class="features-title">Everything You Need</h2>
+                    <p class="features-subtitle">Get the app, the engine, and your first model in minutes.</p>
+                </div>
+
+                <div class="download-cards-grid">
+                    <!-- Desktop App -->
+                    <div class="download-card tilt-card reveal reveal-d1">
+                        <div class="card-inner">
+                            <div class="card-icon-box">
+                                <i class="fas fa-desktop"></i>
+                            </div>
+                            <h3>Desktop Application</h3>
+                            <p>The complete standalone interface. Optimized for performance and ease of use.</p>
+                            <a href="/download/exe" class="card-action-btn primary-action">
+                                Download .exe
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Ollama -->
+                    <div class="download-card tilt-card reveal reveal-d2">
+                        <div class="card-inner">
+                            <div class="card-icon-box">
+                                <i class="fas fa-microchip"></i>
+                            </div>
+                            <h3>Ollama Engine</h3>
+                            <p>The inference engine required for local models. Install this first.</p>
+                            <a href="https://ollama.com/download" target="_blank" class="card-action-btn">
+                                Get Ollama <i class="fas fa-external-link-alt" style="font-size: 0.75em;"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Models -->
+                    <div class="download-card tilt-card reveal reveal-d3"
+                        style="border: 1px solid rgba(255, 193, 7, 0.3); box-shadow: 0 0 30px rgba(255, 193, 7, 0.1);">
+                        <div class="card-inner">
+                            <div class="card-icon-box" style="background: rgba(255, 193, 7, 0.15);">
+                                <i class="fas fa-crown"
+                                    style="background: linear-gradient(135deg, #ffc107, #ffdb58); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;"></i>
+                            </div>
+                            <h3 style="color: #ffc107;">Recommended Model</h3>
+                            <p>For the best experience, we strongly suggest using <strong
+                                    style="color: #ffc107;">Hushiyar</strong>.</p>
+                            <div class="cmd-box" style="border-color: rgba(255, 193, 7, 0.3);">
+                                <div>
+                                    <span class="prompt-sign" style="color: #ffc107;">$</span>
+                                    <span class="cmd-text">ollama pull aryanvala/hushiyar-alpha:latest</span>
+                                </div>
+                                <i class="fas fa-copy copy-cmd" title="Copy"
+                                    onclick="copyCommand(this, 'ollama pull aryanvala/hushiyar-alpha:latest')"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════ STEPS ═══════════════ -->
+        <section class="features-section" style="padding-top: 60px;">
+            <div class="features-container">
+                <div class="features-header reveal">
+                    <span class="features-badge">Quick Start</span>
+                    <h2 class="features-title">Get Started in Minutes</h2>
+                    <p class="features-subtitle">Three simple steps to run DRAKON locally.</p>
+                </div>
+
+                <div class="steps-grid">
+                    <div class="step-item reveal reveal-d1">
+                        <div class="step-badge">1</div>
+                        <h3>Install The App</h3>
+                        <p>Download and run the DRAKON installer. It will set up the UI and necessary bridges.</p>
+                        <div class="step-watermark">01</div>
+                    </div>
+
+                    <div class="step-item reveal reveal-d2">
+                        <div class="step-badge">2</div>
+                        <h3>Install Ollama</h3>
+                        <p>Ollama is the engine that runs the AI models. Install it and ensure it's running in the tray.
+                        </p>
+                        <div class="step-watermark">02</div>
+                    </div>
+
+                    <div class="step-item reveal reveal-d3">
+                        <div class="step-badge">3</div>
+                        <h3>Pull Model</h3>
+                        <p>Open your terminal and run <code>ollama run aryanvala/husiyar-alpha</code> to get the best
+                            results.</p>
+                        <div class="step-watermark">03</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- ═══════════════ CTA ═══════════════ -->
+        <section class="features-cta">
+            <div class="cta-content">
+                <h2>Ready to code smarter?</h2>
+                <p>Get DRAKON running locally and experience limitless AI assistance.</p>
+                <div class="cta-buttons">
+                    <a href="{{ url_for('landing.index') }}?start=true" class="hero-btn primary">Get Started Free</a>
+                    <a href="{{ url_for('landing.index') }}" class="hero-btn secondary">Back to Home</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Copy Toast -->
+    <div class="download-page-toast" id="copyToast">
+        <i class="fas fa-check" style="margin-right: 6px;"></i> Copied to clipboard!
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        function toggleMobileMenu() {
+            const menu = document.getElementById('navbarMobileMenu');
+            if (menu) menu.classList.toggle('active');
+        }
+
+        // 3D Tilt on cards
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.tilt-card').forEach(card => {
+                card.addEventListener('mousemove', (e) => {
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateY = ((x - centerX) / centerX) * 8;
+                    const rotateX = ((y - centerY) / centerY) * -8;
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) scale3d(1.02, 1.02, 1.02)`;
+                });
+
+                card.addEventListener('mouseleave', () => {
+                    card.style.transform = 'perspective(1000px) rotateX(0) rotateY(0) scale3d(1, 1, 1)';
+                });
+            });
+        });
+
+        // Scroll reveal - use features-page as root since it's the scroll container
+        const scrollRoot = document.querySelector('.features-page');
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, { root: scrollRoot, threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Copy command helper
+        function copyCommand(iconEl, text) {
+            navigator.clipboard.writeText(text).then(() => {
+                iconEl.classList.remove('fa-copy');
+                iconEl.classList.add('fa-check');
+                const toast = document.getElementById('copyToast');
+                toast.classList.add('show');
+                setTimeout(() => {
+                    iconEl.classList.remove('fa-check');
+                    iconEl.classList.add('fa-copy');
+                    toast.classList.remove('show');
+                }, 2000);
+            });
+        }
+    </script>
+
+    <!-- Tilt Effect -->
+    <script src="{{ url_for('static', filename='js/tilt.js') }}"></script>
+</body>
+
+</html>

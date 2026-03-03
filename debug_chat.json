@@ -1,0 +1,26 @@
+[
+  {
+    "role": "user",
+    "content": "hii"
+  },
+  {
+    "role": "assistant",
+    "content": "Hello! How can I help you with coding today?"
+  },
+  {
+    "role": "user",
+    "content": "i have one question"
+  },
+  {
+    "role": "assistant",
+    "content": "Of course! Ask away.\r\nlaughsystem.practitioner\r\n\r\n```python\r\ndef sum_two_numbers(a, b):\r\n    return a + b\r\n\r\nresult = sum_two_numbers(5, 10)\r\nprint(result)\r\n```"
+  },
+  {
+    "role": "user",
+    "content": "Hello husiyar,\r\n\r\n"
+  },
+  {
+    "role": "assistant",
+    "content": "How can i help you today?\r\n\r\n"
+  }
+]

@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn More - DRAKON AI</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/logo.png') }}">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+
+    <!-- Styles -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <style>
+        .learn-more-page {
+            background: var(--bg-primary);
+            min-height: 100vh;
+            color: var(--text-primary);
+        }
+
+        .section-padding {
+            padding: 100px 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .learn-hero {
+            text-align: center;
+            padding: 160px 20px 80px;
+            background: radial-gradient(circle at top center, rgba(139, 92, 246, 0.15) 0%, transparent 50%);
+        }
+
+        .learn-hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff 0%, #a78bfa 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .learn-hero p {
+            font-size: 1.25rem;
+            color: var(--text-secondary);
+            max-width: 700px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        .architecture-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            margin-top: 60px;
+        }
+
+        .arch-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 20px;
+            padding: 40px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: transform 0.3s ease;
+        }
+
+        .arch-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255, 255, 255, 0.05);
+        }
+
+        .arch-icon {
+            font-size: 3rem;
+            color: var(--accent-primary);
+            margin-bottom: 20px;
+        }
+
+        .feature-list {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .feature-list li {
+            padding: 10px 0;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--text-secondary);
+        }
+
+        .feature-list li i {
+            color: var(--success);
+            font-size: 0.9rem;
+        }
+
+        .tech-stack-section {
+            text-align: center;
+        }
+
+        .tech-grid {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 40px;
+        }
+
+        .tech-item {
+            background: var(--bg-elevated);
+            padding: 15px 30px;
+            border-radius: 50px;
+            font-weight: 600;
+            color: var(--text-primary);
+            border: 1px solid var(--border-default);
+            transition: all 0.3s ease;
+        }
+
+        .tech-item:hover {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 15px rgba(139, 92, 246, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .architecture-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .learn-hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .showcase-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* ── Interface Showcase Styles ── */
+        .showcase-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-top: 60px;
+        }
+
+        /* Center the 5th odd item below the first 4 */
+        .showcase-grid .showcase-frame:last-child:nth-child(odd) {
+            grid-column: 1 / -1;
+            width: 50%;
+            margin: 0 auto;
+        }
+
+        .showcase-frame {
+            position: relative;
+            width: 100%;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: transform 0.4s ease, box-shadow 0.4s ease;
+        }
+
+        .showcase-frame:hover {
+            transform: translateY(-6px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4), 0 0 20px rgba(139, 92, 246, 0.15);
+        }
+
+        .showcase-frame img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* ── Command Box Styles ── */
+        .cmd-box {
+            background: var(--bg-tertiary);
+            border: 1px solid var(--border-subtle);
+            border-radius: var(--radius-sm);
+            padding: 12px 14px;
+            font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+            font-size: 0.88rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: var(--space-md);
+            transition: all 0.3s;
+        }
+
+        .cmd-box:hover {
+            border-color: var(--border-hover);
+        }
+
+        .cmd-box .prompt-sign {
+            color: var(--accent-primary);
+            margin-right: 8px;
+            user-select: none;
+        }
+
+        .cmd-box .cmd-text {
+            color: var(--text-primary);
+        }
+
+        .cmd-box .copy-cmd {
+            cursor: pointer;
+            color: var(--text-muted);
+            transition: color 0.2s;
+            padding: 2px;
+        }
+
+        .cmd-box .copy-cmd:hover {
+            color: var(--text-primary);
+        }
+
+        /* ── Step Items ── */
+        .step-item {
+            background: rgba(255, 255, 255, 0.02);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: var(--radius-lg);
+            padding: 30px;
+            margin-bottom: 20px;
+            transition: all 0.3s ease;
+        }
+
+        .step-item:hover {
+            background: rgba(255, 255, 255, 0.05);
+            transform: translateY(-2px);
+        }
+
+        .step-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 32px;
+            height: 32px;
+            background: var(--accent-primary);
+            color: #fff;
+            border-radius: 50%;
+            font-weight: 700;
+            margin-right: 12px;
+            font-size: 0.9rem;
+        }
+
+        .step-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .step-content p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 15px;
+        }
+
+        .setup-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* ── Copy Toast ── */
+        .download-page-toast {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%) translateY(20px);
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-default);
+            color: var(--text-primary);
+            padding: 10px 24px;
+            border-radius: var(--radius-full);
+            font-size: 0.85rem;
+            font-weight: 600;
+            opacity: 0;
+            pointer-events: none;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 100000;
+        }
+
+        .download-page-toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+    </style>
+</head>
+
+<body class="fade-in-page">
+    <!-- YUG Page Loader -->
+    <script src="{{ url_for('static', filename='js/loader.js') }}"></script>
+
+    <div class="learn-more-page">
+        <!-- Floating Navbar Reused -->
+        <nav class="floating-navbar">
+            <div class="navbar-content">
+                <a href="{{ url_for('landing.index') }}" style="text-decoration: none;" class="navbar-brand">
+                    <img src="{{ url_for('static', filename='img/logo.png') }}" alt="DRAKON Logo" class="logo-img">
+                    <span>DRAKON</span>
+                </a>
+                <div class="navbar-links">
+                    <a href="{{ url_for('landing.features') }}">Features</a>
+                    <a href="{{ url_for('landing.about') }}">About</a>
+                    <a href="{{ url_for('landing.learnmore') }}" class="active">Learn More</a>
+                </div>
+                <div class="navbar-actions">
+                    <a href="{{ url_for('main.login') }}" class="navbar-btn secondary">Login</a>
+                    <a href="{{ url_for('landing.index') }}?start=true" class="navbar-btn primary">Get Started</a>
+                </div>
+                <button class="navbar-mobile-toggle" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+            <!-- Mobile Menu -->
+            <div class="navbar-mobile-menu" id="navbarMobileMenu">
+                <a href="{{ url_for('landing.features') }}">Features</a>
+                <a href="{{ url_for('landing.about') }}">About</a>
+                <a href="{{ url_for('landing.learnmore') }}" class="active">Learn More</a>
+                <div class="mobile-menu-actions">
+                    <a href="{{ url_for('main.login') }}" class="navbar-btn secondary">Login</a>
+                    <a href="{{ url_for('landing.index') }}?start=true" class="navbar-btn primary">Get Started</a>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Hero Section -->
+        <section class="learn-hero">
+            <div class="container">
+                <span class="features-badge">Documentation</span>
+                <h1>Inside DRAKON AI</h1>
+                <p>Discover the architecture, technology, and vision behind the next-generation coding assistant.</p>
+
+                <!-- Interface Showcase -->
+                <div class="showcase-grid">
+                    <div class="showcase-frame tilt-card">
+                        <img src="{{ url_for('static', filename='img/learn_preview1.png') }}"
+                            alt="DRAKON Interface Overview">
+                    </div>
+                    <div class="showcase-frame tilt-card">
+                        <img src="{{ url_for('static', filename='img/learn_preview2.png') }}"
+                            alt="DRAKON Theme Selection">
+                    </div>
+                    <div class="showcase-frame tilt-card">
+                        <img src="{{ url_for('static', filename='img/learn_preview3.png') }}" alt="DRAKON Code View">
+                    </div>
+                    <div class="showcase-frame tilt-card">
+                        <img src="{{ url_for('static', filename='img/learn_preview4.png') }}"
+                            alt="DRAKON Models Selector">
+                    </div>
+                    <div class="showcase-frame tilt-card">
+                        <img src="{{ url_for('static', filename='img/learn_preview5.png') }}"
+                            alt="DRAKON Web App Code Generation">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Dual Engine Architecture -->
+        <section class="section-padding">
+            <div class="container">
+                <div class="features-header">
+                    <h2 class="features-title">Dual-Engine Intelligence</h2>
+                    <p class="features-subtitle">Combining the best of Cloud and Local AI for unmatched versatility.</p>
+                </div>
+                <div class="architecture-grid">
+                    <!-- Cloud Engine -->
+                    <div class="arch-card">
+                        <i class="fas fa-cloud arch-icon"></i>
+                        <h3>Cloud Engine</h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 20px;">Powered by Groq LPU™ for instant
+                            inference speeds.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Llama 3.3 70B Versatile Model</li>
+                            <li><i class="fas fa-check"></i>
+                                < 300ms Latency</li>
+                            <li><i class="fas fa-check"></i> Complex Logic & Reasoning</li>
+                            <li><i class="fas fa-check"></i> Ideal for heavy coding tasks</li>
+                        </ul>
+                    </div>
+
+                    <!-- Local Engine -->
+                    <div class="arch-card">
+                        <i class="fas fa-shield-alt arch-icon"></i>
+                        <h3>Local Engine</h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 20px;">Privacy-focused local execution
+                            via Ollama.</p>
+                        <ul class="feature-list">
+                            <li><i class="fas fa-check"></i> Runs Offline</li>
+                            <li><i class="fas fa-check"></i> 100% Data Privacy</li>
+                            <li><i class="fas fa-check"></i> Supports Mistral, Gemma, Llama 3</li>
+                            <li><i class="fas fa-check"></i> Zero API Costs</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Complete Setup Guide -->
+        <section class="section-padding" style="background: var(--bg-secondary);">
+            <div class="container">
+                <div class="features-header">
+                    <h2 class="features-title">Complete Setup Guide</h2>
+                    <p class="features-subtitle">Get up and running with DRAKON in minutes.</p>
+                </div>
+
+                <div class="setup-grid">
+                    <!-- Step 1 -->
+                    <div class="step-item">
+                        <div class="step-title">
+                            <span class="step-badge">1</span>
+                            Download the Application
+                        </div>
+                        <div class="step-content">
+                            <p>Get the standalone Windows executable for maximum performance and offline capability.</p>
+                            <a href="/download/exe" class="navbar-btn primary"
+                                style="display: inline-flex; align-items: center; gap: 8px;">
+                                <i class="fab fa-windows"></i> Download for x64
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Step 2 -->
+                    <div class="step-item">
+                        <div class="step-title">
+                            <span class="step-badge">2</span>
+                            Install Ollama Engine
+                        </div>
+                        <div class="step-content">
+                            <p>Ollama is the backend engine required to run local AI models. Install this first.</p>
+                            <a href="https://ollama.com/download" target="_blank" class="navbar-btn secondary"
+                                style="display: inline-flex; align-items: center; gap: 8px;">
+                                <i class="fas fa-download"></i> Get Ollama
+                            </a>
+                        </div>
+                    </div>
+
+                    <!-- Step 3 -->
+                    <div class="step-item" style="border: 1px solid rgba(255, 193, 7, 0.3);">
+                        <div class="step-title">
+                            <span class="step-badge" style="background: #ffc107; color: #000;">3</span>
+                            <span style="color: #ffc107;">Setup Hushiyar Model (Recommended)</span>
+                        </div>
+                        <div class="step-content">
+                            <p>For the best experience, we strongly recommend the <strong>Hushiyar</strong> model. Run
+                                these commands in your terminal:</p>
+
+                            <p style="font-size: 0.9em; margin-bottom: 5px; opacity: 0.8;">1. Pull the model:</p>
+                            <div class="cmd-box" style="margin-top: 5px; margin-bottom: 20px;">
+                                <div>
+                                    <span class="prompt-sign">$</span>
+                                    <span class="cmd-text">ollama pull aryanvala/hushiyar-alpha:latest</span>
+                                </div>
+                                <i class="fas fa-copy copy-cmd" title="Copy"
+                                    onclick="copyCommand(this, 'ollama pull aryanvala/hushiyar-alpha:latest')"></i>
+                            </div>
+
+                            <p style="font-size: 0.9em; margin-bottom: 5px; opacity: 0.8;">2. Run the model:</p>
+                            <div class="cmd-box" style="margin-top: 5px;">
+                                <div>
+                                    <span class="prompt-sign">$</span>
+                                    <span class="cmd-text">ollama run aryanvala/hushiyar-alpha:latest</span>
+                                </div>
+                                <i class="fas fa-copy copy-cmd" title="Copy"
+                                    onclick="copyCommand(this, 'ollama run aryanvala/hushiyar-alpha:latest')"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Core Features Deep Dive -->
+        <section class="section-padding" style="background: var(--bg-secondary);">
+            <div class="container">
+                <h2 class="features-title" style="text-align: center; margin-bottom: 60px;">
+                    <u>Core Capabilities</u>
+                </h2>
+
+                <div class="about-grid"> <!-- Reusing grid layout -->
+                    <div class="about-card">
+                        <h3><u>Visual Intelligence</u></h3>
+                        <p>
+                            Integrated ComfyUI workflow ensures high-fidelity image generation.
+                            Unlike standard diffusers, DRAKON uses a custom node-based pipeline
+                            for "Juggernaut" quality visuals directly in chat.
+                        </p>
+                    </div>
+                    <br>
+                    <div class="about-card">
+                        <h3><u>Context Awareness</u></h3>
+                        <p>
+                            The system maintains a sliding window of chat history, ensuring the AI
+                            remembers previous code snippets and instructions without hitting token limits.
+                        </p>
+                    </div>
+                    <br>
+                    <div class="about-card">
+                        <h3><u>Secure Auth</u></h3>
+                        <p>
+                            Built on Firebase Authentication, providing enterprise-grade security
+                            for user accounts, session management, and history storage.
+                        </p>
+                    </div>
+                    <br>
+                    <div class="about-card">
+                        <h3><u>Reactive UI</u></h3>
+                        <p>
+                            A custom-built vanilla JS frontend that mimics the responsiveness of React,
+                            featuring real-time streaming, syntax highlighting, and glassmorphism.
+                        </p>
+                    </div>
+                    <br>
+                    <div class="about-card">
+                        <h3><u>Platform Native</u></h3>
+                        <p>
+                            Available as a standalone Windows executable (.exe) for maximum performance,
+                            offline capabilities, and seamless OS integration.
+                        </p>
+                    </div>
+                    <br>
+                    <div class="about-card">
+                        <h3><u>Advanced File Analysis</u></h3>
+                        <p>
+                            Upload documents, code files, and images directly into the chat.
+                            The AI engine automatically extracts and analyzes the content
+                            to provide highly accurate, context-aware responses.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Tech Stack -->
+        <section class="section-padding tech-stack-section">
+            <div class="container">
+                <h2 class="features-title">Technology Stack</h2>
+                <div class="tech-grid">
+                    <div class="tech-item">Python 3.10</div>
+                    <div class="tech-item">Flask</div>
+
+
+                    <div class="tech-item">Ollama</div>
+                    <div class="tech-item">ComfyUI</div>
+
+                    <div class="tech-item">CSS Variables</div>
+                    <div class="tech-item">Firebase</div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="features-cta">
+            <div class="cta-content">
+                <h2>Ready to Code?</h2>
+                <p>Experience the power of DRAKON AI today.</p>
+                <div class="cta-buttons">
+                    <a href="{{ url_for('landing.index') }}?start=true" class="hero-btn primary">Start Chatting</a>
+                    <a href="https://github.com/Yugpatel009" class="hero-btn secondary" target="_blank"><i
+                            class="fab fa-github"></i> View on GitHub</a>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Copy Toast -->
+    <div class="download-page-toast" id="copyToast">
+        <i class="fas fa-check" style="margin-right: 6px;"></i> Copied to clipboard!
+    </div>
+
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('navbarMobileMenu');
+            if (menu) menu.classList.toggle('active');
+        }
+
+        // Copy command helper
+        function copyCommand(iconEl, text) {
+            navigator.clipboard.writeText(text).then(() => {
+                iconEl.classList.remove('fa-copy');
+                iconEl.classList.add('fa-check');
+                const toast = document.getElementById('copyToast');
+                if (toast) {
+                    toast.classList.add('show');
+                    setTimeout(() => {
+                        iconEl.classList.remove('fa-check');
+                        iconEl.classList.add('fa-copy');
+                        toast.classList.remove('show');
+                    }, 2000);
+                }
+            });
+        }
+    </script>
+    <script src="{{ url_for('static', filename='js/tilt.js') }}"></script>
+</body>
+
+</html>

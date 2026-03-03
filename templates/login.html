@@ -1,0 +1,683 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login - Drakon AI</title>
+  <link rel="icon" type="image/png" href="{{ url_for('static', filename='img/logo.png') }}">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+  <style>
+    /* ==================== ANIMATIONS ==================== */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes slideUp {
+      from {
+        opacity: 0;
+        transform: translateY(15px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Cinematic Light Beam Reveal */
+    @keyframes beamExpand {
+      0% {
+        transform: scaleY(0) skewX(-10deg);
+        opacity: 0;
+        filter: blur(50px);
+      }
+
+      100% {
+        transform: scaleY(1) skewX(-15deg);
+        opacity: 1;
+        filter: blur(15px);
+      }
+    }
+
+    /* Aurora Pulse */
+    @keyframes auroraShift {
+
+      0%,
+      100% {
+        opacity: 0.3;
+        transform: translateX(0) scale(1);
+      }
+
+      50% {
+        opacity: 0.6;
+        transform: translateX(-20px) scale(1.05);
+      }
+    }
+
+    /* Logo Shimmer */
+    @keyframes logoShimmer {
+      0% {
+        filter: brightness(0.8) drop-shadow(0 0 0px rgba(255, 255, 255, 0));
+      }
+
+      50% {
+        filter: brightness(1.2) drop-shadow(0 0 20px rgba(255, 255, 255, 0.1));
+      }
+
+      100% {
+        filter: brightness(0.8) drop-shadow(0 0 0px rgba(255, 255, 255, 0));
+      }
+    }
+
+    /* ==================== BASE STYLES ==================== */
+    /* Handled by style.css */
+
+    .page-container {
+      display: flex;
+      width: 100%;
+      min-height: 100vh;
+    }
+
+    /* ==================== LEFT PANEL ==================== */
+    .left-panel {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      z-index: 10;
+      background: var(--bg-primary);
+      border-right: 1px solid var(--border-subtle);
+      max-width: 600px;
+    }
+
+    .header {
+      padding: 32px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 700;
+      font-size: 1.2rem;
+      letter-spacing: -0.03em;
+    }
+
+    .logo i {
+      color: var(--accent-primary);
+    }
+
+    .login-content {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 0 80px;
+      animation: fadeIn 0.8s ease-out;
+    }
+
+    .login-box {
+      width: 100%;
+      max-width: 380px;
+    }
+
+    .login-title {
+      font-size: 2rem;
+      font-weight: 600;
+      margin-bottom: 8px;
+      letter-spacing: -0.02em;
+    }
+
+    .login-subtitle {
+      color: var(--text-secondary);
+      margin-bottom: 40px;
+      font-size: 0.95rem;
+    }
+
+    /* ==================== MESSAGE ==================== */
+    .message {
+      padding: 12px 16px;
+      border-radius: var(--radius-md);
+      font-size: 0.875rem;
+      text-align: center;
+      margin-bottom: 20px;
+      display: none;
+      animation: slideUp 0.3s ease-out;
+    }
+
+    .message.flash-danger {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #fca5a5;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .message.flash-success {
+      background: rgba(34, 197, 94, 0.1);
+      border: 1px solid rgba(34, 197, 94, 0.3);
+      color: #86efac;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    /* ==================== FORMS & BUTTONS ==================== */
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    .form-input {
+      width: 100%;
+      padding: 14px 18px;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border-default);
+      border-radius: var(--radius-md);
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      transition: var(--transition-fast);
+      outline: none;
+    }
+
+    .form-input:focus {
+      border-color: var(--text-secondary);
+      background: var(--bg-elevated);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 14px;
+      border-radius: var(--radius-md);
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+      transition: var(--transition-fast);
+      border: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+
+    .btn-primary {
+      background: var(--text-primary);
+      color: var(--bg-primary);
+    }
+
+    .btn-primary:hover {
+      background: #e5e5e5;
+      transform: translateY(-1px);
+    }
+
+    .btn-secondary {
+      background: var(--bg-elevated);
+      color: var(--text-primary);
+      border: 1px solid var(--border-default);
+      margin-bottom: 12px;
+    }
+
+    .btn-secondary:hover {
+      background: var(--bg-bubble);
+    }
+
+    .btn i {
+      font-size: 1rem;
+    }
+
+    /* ==================== RIGHT PANEL (VIDEO STYLE) ==================== */
+    .right-panel {
+      flex: 1.2;
+      background: #000;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Main sharp V-beam from right */
+    .v-beam {
+      position: absolute;
+      top: -20%;
+      right: -10%;
+      width: 60%;
+      height: 140%;
+      background: linear-gradient(-85deg,
+          rgba(255, 255, 255, 0.12) 0%,
+          rgba(100, 150, 255, 0.05) 20%,
+          rgba(0, 0, 0, 0) 60%);
+      transform-origin: top right;
+      animation: beamExpand 2.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+      pointer-events: none;
+      z-index: 2;
+    }
+
+    /* The 'Glow Source' on the right edge */
+    .light-source {
+      position: absolute;
+      right: -100px;
+      top: 10%;
+      bottom: 10%;
+      width: 300px;
+      background: radial-gradient(ellipse at center,
+          rgba(255, 255, 255, 0.15) 0%,
+          rgba(59, 130, 246, 0.05) 40%,
+          transparent 80%);
+      filter: blur(60px);
+      z-index: 1;
+    }
+
+    /* Aurora / Atmosphere Flow */
+    #aurora-container {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      opacity: 0.6;
+    }
+
+    /* Logo Styling */
+    .logo-container {
+      position: relative;
+      z-index: 5;
+      width: 400px;
+      height: 400px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .drakon-svg {
+      width: 100%;
+      height: 100%;
+      fill: none;
+      stroke: url(#logoGradient);
+      stroke-width: 1.5;
+      stroke-dasharray: 1000;
+      stroke-dashoffset: 1000;
+      animation:
+        drawLogo 3s ease-out forwards,
+        logoShimmer 6s ease-in-out infinite 3s;
+      opacity: 0.8;
+    }
+
+    @keyframes drawLogo {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    /* Dynamic Text Styling */
+    .dynamic-text-container {
+      position: relative;
+      z-index: 5;
+      max-width: 500px;
+      padding: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .text-backdrop {
+      position: absolute;
+      width: 400px;
+      height: 300px;
+      background: radial-gradient(circle, rgba(59, 130, 246, 0.08) 0%, transparent 70%);
+      filter: blur(50px);
+      z-index: -1;
+    }
+
+    .quote-wrapper {
+      text-align: center;
+    }
+
+    .dynamic-quote {
+      font-size: 1.8rem;
+      font-weight: 300;
+      line-height: 1.5;
+      letter-spacing: -0.01em;
+      color: rgba(255, 255, 255, 0.9);
+      margin-bottom: 24px;
+      min-height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .quote-author {
+      font-size: 0.9rem;
+      color: var(--accent-primary);
+      font-weight: 500;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      opacity: 0;
+      transition: opacity 0.5s ease-in-out;
+    }
+
+    .quote-author.visible {
+      opacity: 1;
+    }
+
+    /* Typewriter cursor */
+    .typing-cursor {
+      display: inline-block;
+      width: 2px;
+      height: 1.2em;
+      background: var(--accent-primary);
+      margin-left: 4px;
+      animation: blink 0.8s infinite;
+      vertical-align: text-bottom;
+    }
+
+    @keyframes blink {
+
+      0%,
+      50% {
+        opacity: 1;
+      }
+
+      51%,
+      100% {
+        opacity: 0;
+      }
+    }
+
+    /* Text reveal animation */
+    @keyframes textGlow {
+      0% {
+        text-shadow: 0 0 0px rgba(245, 166, 35, 0);
+      }
+
+      50% {
+        text-shadow: 0 0 20px rgba(245, 166, 35, 0.3);
+      }
+
+      100% {
+        text-shadow: 0 0 0px rgba(245, 166, 35, 0);
+      }
+    }
+
+    .dynamic-quote.glow {
+      animation: textGlow 2s ease-in-out;
+    }
+
+    /* ==================== RESPONSIVE ==================== */
+    @media (max-width: 1100px) {
+      .login-content {
+        padding: 0 40px;
+      }
+    }
+
+    @media (max-width: 900px) {
+      .right-panel {
+        display: none;
+      }
+
+      .left-panel {
+        max-width: 100%;
+      }
+
+      .login-content {
+        align-items: center;
+      }
+    }
+  </style>
+</head>
+
+<body class="fade-in-page">
+  <!-- YUG Page Loader -->
+  <script src="{{ url_for('static', filename='js/loader.js') }}"></script>
+
+  <div class="page-container">
+    <!-- Left Panel -->
+    <div class="left-panel">
+      <header class="header">
+        <div class="logo">
+          <img src="{{ url_for('static', filename='img/logo.png') }}" alt="Drakon Logo" class="logo-img">
+          <span>Drakon AI</span>
+        </div>
+      </header>
+
+      <main class="login-content">
+        <div class="login-box">
+          <h1 class="login-title">Welcome back</h1>
+          <p class="login-subtitle">Log in to continue your journey.</p>
+
+          <!-- Message UI -->
+          <div id="message-div" class="message"></div>
+
+          <!-- Login Options -->
+          <div id="login-options">
+
+            <button class="btn btn-secondary" id="btn-email-trigger">
+              <i class="fas fa-envelope"></i>
+              <span>Login with Email</span>
+            </button>
+          </div>
+
+          <!-- Email Login Form (Hidden initially) -->
+          <div id="email-form" style="display: none; animation: slideUp 0.4s ease-out;">
+            <form id="actual-login-form">
+              <div class="form-group">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" id="email" class="form-input" placeholder="Enter your email" required
+                  autocomplete="email">
+              </div>
+              <div class="form-group">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" id="password" class="form-input" placeholder="Enter your password" required
+                  autocomplete="current-password">
+              </div>
+              <button type="submit" class="btn btn-primary" id="submit-btn">
+                <span>Continue</span>
+                <i class="fas fa-arrow-right"></i>
+              </button>
+            </form>
+            <p style="text-align: center; margin-top: 20px; font-size: 0.85rem;">
+              <a href="#" id="back-to-options" style="color: var(--text-secondary); text-decoration: none;">
+                <i class="fas fa-chevron-left" style="font-size: 0.7rem;"></i> All options
+              </a>
+            </p>
+          </div>
+
+          <p style="margin-top: 32px; font-size: 0.9rem; color: var(--text-secondary); text-align: center;">
+            Don't have an account? <a href="/signup"
+              style="color: var(--text-primary); font-weight: 600; text-decoration: none;">Sign up</a>
+          </p>
+        </div>
+      </main>
+
+      <footer style="padding: 32px 48px; font-size: 0.75rem; color: var(--text-muted); text-align: center;">
+        By continuing, you agree to our <a href="#" style="color: inherit; text-decoration: underline;">Terms of
+          Service</a> and <a href="#" style="color: inherit; text-decoration: underline;">Privacy Policy</a>.
+      </footer>
+    </div>
+
+    <!-- Right Panel: Cinematic Lighting -->
+    <div class="right-panel">
+      <div class="v-beam"></div>
+      <div class="light-source"></div>
+      <div id="aurora-container"></div>
+
+      <!-- Dynamic Random Text Display -->
+      <div class="dynamic-text-container">
+        <div class="text-backdrop"></div>
+        <div class="quote-wrapper">
+          <p class="dynamic-quote" id="dynamic-quote"></p>
+          <span class="quote-author" id="quote-author"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initAurora } from "{{ url_for('static', filename='js/aurora.js') }}";
+
+    document.addEventListener('DOMContentLoaded', () => {
+      // Initialize Aurora with a Cool/Blue theme
+      initAurora('aurora-container', {
+        color: [0.1, 0.4, 0.9], // Blue-ish
+        amplitude: 1.0,
+        distance: 0,
+        enableMouseInteraction: true
+      });
+    });
+  </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const btnEmailTrigger = document.getElementById('btn-email-trigger');
+      const loginOptions = document.getElementById('login-options');
+      const emailForm = document.getElementById('email-form');
+      const backToOptions = document.getElementById('back-to-options');
+      const messageDiv = document.getElementById('message-div');
+      const actualForm = document.getElementById('actual-login-form');
+
+      function showMessage(message, category) {
+        const icon = category === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+        messageDiv.innerHTML = `<i class="fas ${icon}"></i><span>${message}</span>`;
+        messageDiv.className = `message flash-${category}`;
+        messageDiv.style.display = 'flex';
+      }
+
+      btnEmailTrigger.addEventListener('click', () => {
+        loginOptions.style.display = 'none';
+        emailForm.style.display = 'block';
+        document.getElementById('email').focus();
+      });
+
+      backToOptions.addEventListener('click', (e) => {
+        e.preventDefault();
+        emailForm.style.display = 'none';
+        loginOptions.style.display = 'block';
+        messageDiv.style.display = 'none';
+      });
+
+      actualForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const btn = e.target.querySelector('button');
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+
+        if (!email || !password) {
+          showMessage('Please fill in all fields.', 'danger');
+          return;
+        }
+
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Authenticating...';
+
+        fetch('/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: email, password: password })
+        })
+          .then(response => response.json().then(data => ({ status: response.status, data: data })))
+          .then(({ status, data }) => {
+            btn.disabled = false;
+
+            if (status === 200 && data.status === 'success') {
+              showMessage('Welcome back! Redirecting...', 'success');
+              btn.innerHTML = '<i class="fas fa-check"></i> Redirecting...';
+              btn.style.background = '#10b981';
+              btn.style.color = '#fff';
+              setTimeout(() => {
+                window.location.href = data.redirect_url || '/';
+              }, 500);
+            } else {
+              showMessage(data.message || 'Invalid email or password.', 'danger');
+              btn.innerHTML = '<span>Continue</span><i class="fas fa-arrow-right"></i>';
+            }
+          })
+          .catch(error => {
+            btn.disabled = false;
+            btn.innerHTML = '<span>Continue</span><i class="fas fa-arrow-right"></i>';
+            console.error('Network Error:', error);
+            showMessage('A network error occurred. Please try again.', 'danger');
+          });
+      });
+    });
+
+    // Dynamic Random Text System
+    const quotes = [
+      { text: "The future belongs to those who believe in the beauty of their dreams.", author: "Eleanor Roosevelt" },
+      { text: "Innovation distinguishes between a leader and a follower.", author: "Steve Jobs" },
+      { text: "The only way to do great work is to love what you do.", author: "Steve Jobs" },
+      { text: "Artificial intelligence is the new electricity.", author: "Andrew Ng" },
+      { text: "The best way to predict the future is to create it.", author: "Peter Drucker" },
+      { text: "Technology is best when it brings people together.", author: "Matt Mullenweg" },
+      { text: "The advance of technology is based on making it fit in so you don't notice it.", author: "Bill Gates" },
+      { text: "Stay hungry, stay foolish.", author: "Steve Jobs" },
+      { text: "Code is poetry.", author: "WordPress" },
+      { text: "Think different.", author: "Apple" },
+      { text: "Move fast and break things.", author: "Mark Zuckerberg" },
+      { text: "Simplicity is the ultimate sophistication.", author: "Leonardo da Vinci" }
+    ];
+
+    const quoteElement = document.getElementById('dynamic-quote');
+    const authorElement = document.getElementById('quote-author');
+    let currentQuoteIndex = 0;
+
+    function getRandomQuote() {
+      let newIndex;
+      do {
+        newIndex = Math.floor(Math.random() * quotes.length);
+      } while (newIndex === currentQuoteIndex && quotes.length > 1);
+      currentQuoteIndex = newIndex;
+      return quotes[currentQuoteIndex];
+    }
+
+    function typeWriter(text, element, callback) {
+      let i = 0;
+      element.innerHTML = '<span class="typing-cursor"></span>';
+
+      function type() {
+        if (i < text.length) {
+          element.innerHTML = text.substring(0, i + 1) + '<span class="typing-cursor"></span>';
+          i++;
+          setTimeout(type, 40 + Math.random() * 30);
+        } else {
+          // Remove cursor and add glow
+          element.innerHTML = text;
+          element.classList.add('glow');
+          setTimeout(() => element.classList.remove('glow'), 2000);
+          if (callback) callback();
+        }
+      }
+      type();
+    }
+
+    function displayQuote() {
+      const quote = getRandomQuote();
+      authorElement.classList.remove('visible');
+
+      typeWriter(quote.text, quoteElement, () => {
+        authorElement.textContent = '— ' + quote.author;
+        setTimeout(() => authorElement.classList.add('visible'), 500);
+      });
+    }
+
+    // Initial display and rotation
+    setTimeout(displayQuote, 800);
+    setInterval(() => {
+      displayQuote();
+    }, 8000);
+  </script>
+</body>
+
+</html>
