@@ -26,9 +26,6 @@ websocket-client
 werkzeug>=2.3.0
 gunicorn==23.0.0  # optional
 setuptools
-pyinstaller
-PyQt5
-PyQtWebEngine
 
 
 # Type hints compatibility
@@ -38,14 +35,7 @@ typing-extensions>=4.0.0
 PyMuPDF
 python-docx
 Pillow
-easyocr
 pytesseract
-
-
-# CUDA GPU Acceleration (PyTorch with CUDA 12.1)
-# Install with: pip install -r requirements.txt --extra-index-url https://download.pytorch.org/whl/cu121
-torch
-torchvision
 
 # Firebase Admin SDK
 firebase-admin
